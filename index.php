@@ -1,15 +1,17 @@
 <?php
- header ('content-type: image/svg+xml'); 
- date_default_timezone_set("UTC");
- $filename="counter";
- $myfile = fopen($filename, "a+");
- $data=0;
- if(filesize($filename)) $data=intval(fread($myfile, filesize($filename)));
- ftruncate($myfile, 0);
- rewind($myfile);
- $data=strval($data+1);
- fwrite($myfile, $data);
- fclose($myfile);
+	header ('content-type: image/svg+xml'); 
+	header('cache-control: max-age=0, no-cache, no-store, must-revalidate');
+	date_default_timezone_set("UTC");
+	$filename="counter";
+	$myfile = fopen($filename, "a+");
+	$data=0;
+	if(filesize($filename)) $data=intval(fread($myfile, filesize($filename)));
+	ftruncate($myfile, 0);
+	rewind($myfile);
+	if(preg_match("/github-camo/i", $_SERVER['HTTP_USER_AGENT']))$data=strval($data+1);
+	else $data=strval($data);
+	fwrite($myfile, $data);
+	fclose($myfile);
 ?>
 <svg xmlns="http://www.w3.org/2000/svg" width="<?php echo (strlen(str_replace(" ", "",$data))*8)+89;?>" height="20">
 	<rect width="81" height="20" fill="#555"/>
